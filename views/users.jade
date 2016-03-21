@@ -1,0 +1,25 @@
+doctype html
+html(lang="en")
+  head
+    body
+    h1 All users:
+
+    div(id="usersTable")
+     table(border='1')
+      thead
+       tr
+        th Approve
+        th ID
+        th Name
+        th Surname
+        th Birthday
+        each item in items
+         tr
+          td=item.approve
+          td=item.id
+          td=item.name
+          td=item.surname
+          td=item.birthday
+     tbody
+     p
+     a(href="http://localhost:3000/") Admin page

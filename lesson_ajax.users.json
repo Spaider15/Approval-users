@@ -1,0 +1,27 @@
+[
+	{
+		"name": "Vasya",
+		"surname": "Petrov",
+		"birthday": "1980-07-31"
+	},
+	{
+		"name": "Masha",
+		"surname": "Kostina",
+		"birthday": "1971-10-28"
+	},
+	{
+		"name": "Petya",
+		"surname": "Ivanov",
+		"birthday": "2000-09-10"
+	},
+	{
+		"name": "Misha",
+		"surname": "Vasiliev",
+		"birthday": "1985-10-15"
+	},
+	{
+		"name": "Dasha",
+		"surname": "Morozova",
+		"birthday": "1994-08-10"
+	}
+]

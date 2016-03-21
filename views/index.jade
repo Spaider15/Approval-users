@@ -1,0 +1,61 @@
+doctype html
+html(lang="en")
+  head
+    body
+    h1 Admin page
+
+    div(id="usersTable")
+     table(border='1')
+      thead
+       tr
+        th Approve?
+        th ID
+        th Name
+        th Surname
+        th Birthday
+        each item in items
+         tr
+          td=item.approve
+          td=item.id
+          td=item.name
+          td=item.surname
+          td=item.birthday
+     tbody
+     p
+     a(href="http://localhost:3000/users") All users
+     p
+     a(href="http://localhost:3000/hello.html") Hello
+
+     script(type='text/javascript').
+       var table = document.getElementById('usersTable');
+       var elem = table.childNodes[0].childNodes[0];
+       var length = elem.childNodes.length;
+
+       for(var i = 1; i < length; i += 1) {
+         var row =  elem.childNodes[i]
+         row.childNodes[0].innerHTML = "<button id=" + row.childNodes[1].innerHTML +">Yes</button><button id="+ row.childNodes[1].innerHTML +">No</button>";
+       }
+
+       table.onclick = function(e) {
+         var target = e.target;
+         var id = JSON.stringify(
+         {
+          id: target.id
+         });
+         if(target.tagName != "BUTTON") {return};
+           if(target.innerText == "Yes") {
+             var xhr = new XMLHttpRequest();
+             xhr.open('PUT', "http://localhost:3000/users", true);
+             xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+             xhr.send(id);
+             target.parentNode.innerHTML = "<b>Updated</b>";
+           }
+
+         if(target.innerText == "No") {
+                     var xhr = new XMLHttpRequest();
+           xhr.open('DELETE', "http://localhost:3000/users", true);
+           xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+           xhr.send(id);
+           target.parentNode.innerHTML = "<b>Deleted</b>";
+          }
+       }
