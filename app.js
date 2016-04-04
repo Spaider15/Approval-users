@@ -10,7 +10,7 @@ var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
   password : 'admin',
-  database: 'myapp'
+  database: 'users'
 });
 
 //  set DEBUG=myapp:* & npm start
@@ -23,95 +23,65 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json())
 
 app.get('/users', function(req,res){
-  var data = {
-    "Data":""
-  };
-
   connection.query('SELECT * from users', function(err, rows, fields) {
-     if(rows.length != 0) {
-       data["Data"] = rows;
-       res.render('users', {
-       items: rows
-    });
-    } else {
-      data["Data"] = "No data Found..";
-      res.send(data)
-   };
-   });
-   });
+     if(rows === undefined) {
+           res.send("No data Found, err: " + err)
+     } else {
+      res.render('users', {
+      items: rows
+                });
+            };
+        });
+      });
 
 app.post('/users',function(req,res){
-    req.body.forEach((body,n)=>{
+      var body = req.body;
       var id = 0;
       var approve = false;
       var name = body.name;
       var surname = body.surname;
       var birthday = body.birthday;
-      console.log(body);
-      console.log(name,surname,birthday);
-      var data = {
-          "error":1,
-          "Users":""
-        };
      if(!!name && !!surname && !!birthday){
         connection.query("INSERT INTO users VALUES(?,?,?,?,?)",[id,name,surname,birthday,approve],function(err){
-            if(!!err){
-                data["Users"] = err;
-            }
-           if(n == req.body.length-1) {
-             data["error"] = 0;
-             data["Users"] = "Users Added Successfully";
-             res.json(data);
+            if(err){
+                res.json(err);
+            } else {
+             res.json("Users Added Successfully");
            }
           });
      }else{
-        data["Users"] = "Please provide all required data (i.e : Name, surname, birthday)";
-       res.json(data);
+       res.json("Please provide all required data (i.e : Name, surname, birthday)");
      };
-   });
 });
 
 app.delete('/users',function(req,res){
     var id = req.body.id;
-    var data = {
-        "error":1,
-        "Users":""
-    };
-    if(!!id){
+
+    if(id){
         connection.query("DELETE FROM users WHERE id=?",[id],function(err, rows, fields){
-            if(!!err){
-                data["Users"] = err;
+            if(err){
+                res.json(err);
             }else{
-                data["error"] = 0;
-                data["Users"] = "User deleted Successfully";
+              res.json("User deleted Successfully");
             }
-            res.json(data);
         });
     }else{
-        data["Users"] = "Please provide user ID";
-        res.json(data);
+        res.json("Please provide user ID");
     }
 });
 
 app.put('/users',function(req,res){
     var id = req.body.id;
-    var data = {
-        "error":1,
-        "Users":""
-    };
-    if(!!id){
+    if(id){
         connection.query("UPDATE users SET approve=1 WHERE id=?",[id],function(err, rows, fields){
-            if(!!err){
-                data["Users"] = err;
+            if(err){
+                res.json(err);
             }else{
-                data["error"] = 0;
-                data["Users"] = "User approved";
+                  res.json("User approved");
             }
-            res.json(data);
         });
     }else{
-        data["Users"] = "Please provide user ID";
-        res.json(data);
+      res.json("Please provide user ID");
     }
 });
 
